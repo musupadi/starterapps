@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -8,8 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
-
+import 'package:http/http.dart' as http;
 import '../Constant/Size.dart';
+import '../Route.dart';
+import '../Serverside/API.dart';
 import '../Serverside/Server.dart';
 final String _adUnitId = Platform.isAndroid
     ? 'ca-app-pub-3940256099942544/1033173712'
@@ -31,6 +34,7 @@ Map<String,String> headerBuilder(String token) {
     "token": token
   };
 }
+
 Map<String,String> headerBuilderPost(String token) {
   return headers = {
     "Accept": "application/json",
@@ -71,42 +75,6 @@ Widget NotFound(String text){
         ],
       ),
     ),
-  );
-}
-void Logout(BuildContext context) async{
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  // FailedMessage("Contoh ", name.toString(), context);
-
-  await pref.clear();
-
-  Navigator.push(
-      context,
-      PageRouteBuilder(
-          transitionDuration: Duration(seconds: 1),
-          transitionsBuilder: (
-              BuildContext context,
-              Animation<double> animation,
-              Animation<double> secAnimation,
-              Widget child) {
-            animation = CurvedAnimation(
-                parent: animation,
-                curve: Curves.elasticInOut
-            );
-            return ScaleTransition(
-              scale: animation,
-              child: child,
-              alignment: Alignment.center,
-            );
-          },
-          pageBuilder: (
-              BuildContext context,
-              Animation<double> animation,
-              Animation<double> secAnimation
-              )
-          {
-            return Login();
-          }
-      )
   );
 }
 FailedMessage (String title,String desc,BuildContext context){
@@ -612,3 +580,60 @@ String MonthChanger(String Month){
   }
   return month;
 }
+double percentage = 50;
+double Percentage(double Value,bool preview){
+  if(preview){
+    return (Value*percentage)/100;
+  }else{
+    return Value;
+  }
+}
+
+
+//Get Data
+Future<String> getIdPreset() async{
+  final response=await http.get(
+    Uri.parse(
+        APIBaseURL()+
+            getDesign()
+    ),
+  ).timeout(Duration(seconds: 5));
+  return json.decode(response.body)['data'][0]['id_design'];
+}
+Future<List> getCustomPreset() async{
+  final response=await http.get(
+    Uri.parse(
+        APIBaseURL()+
+            getCustomDesign(await getIdPreset())
+    ),
+  ).timeout(Duration(seconds: 5));
+  return json.decode(response.body)['data'];
+}
+Future<List> getWhereCustomPreset(String idPreset) async{
+  final response=await http.get(
+    Uri.parse(
+        APIBaseURL()+
+            getCustomDesign(idPreset)
+    ),
+  ).timeout(Duration(seconds: 5));
+  return json.decode(response.body)['data'];
+}
+Future<List> getListPreset(String idPreset) async{
+  final response=await http.get(
+    Uri.parse(
+        APIBaseURL()+
+            getPresetList(idPreset)
+    ),
+  ).timeout(Duration(seconds: 5));
+  return json.decode(response.body)['data'];
+}
+Future<List> getListCategory(String id_preset) async{
+  final response=await http.get(
+    Uri.parse(
+        APIBaseURL()+
+            getCategory(id_preset)
+    ),
+  ).timeout(Duration(seconds: 5));
+  return json.decode(response.body)['data'];
+}
+

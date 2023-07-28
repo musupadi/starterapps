@@ -13,29 +13,33 @@ import 'package:project_management/Loading.dart';
 import 'package:project_management/LoginIn.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Constant/colors.dart';
-import 'Liblary/Ascendant.dart';
-import 'Serverside/API.dart';
-import 'Serverside/Server.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+import '../Constant/colors.dart';
+import '../Liblary/Ascendant.dart';
+import '../Serverside/API.dart';
+import '../Serverside/Server.dart';
+
+class Simple extends StatefulWidget {
+  String id_preset;
+  bool preview;
+  Simple({Key? key,
+    required this.id_preset,
+    required this.preview
+  });
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Simple> createState() => _SimplerState();
 }
 
-
-
-class _LoginState extends State<Login> {
+class _SimplerState extends State<Simple> {
   late String id_domain = "";
   late String domain = "";
   Future<List> getDomain() async {
     final response=await http.get(
-        Uri.parse(
-            APIBaseURL()+
-                DataDomain()
-        ),
+      Uri.parse(
+          APIBaseURL()+
+              DataDomain()
+      ),
     ).timeout(Duration(seconds: 5));
     return json.decode(response.body)['data'];
   }
@@ -179,21 +183,21 @@ class _LoginState extends State<Login> {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    border: Border.all(color: PrimaryColors(),width: 1),
-                    image: DecorationImage(image: NetworkImage(ProfilePicture == "" || ProfilePicture == null || ProfilePicture == "null"? BaseURL()+"pu_logo.png" : ProfilePicture))
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(color: PrimaryColors(),width: 1),
+                      image: DecorationImage(image: NetworkImage(ProfilePicture == "" || ProfilePicture == null || ProfilePicture == "null"? BaseURL()+"pu_logo.png" : ProfilePicture))
                   ),
                 ),
                 SizedBox(
                   height: 5,
                 ),
                 Text(
-                    nama,
-                    style: TextStyle(
+                  nama,
+                  style: TextStyle(
                       color: PrimaryColors(),
                       fontSize: FontSizeLarge(),
                       fontWeight: FontWeight.bold
-                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 10,
@@ -222,31 +226,12 @@ class _LoginState extends State<Login> {
   }
 
 
-  // Future<String> getIdPreset() async{
-  //   final response=await http.get(
-  //     Uri.parse(
-  //         APIBaseURL()+
-  //             getDesign()
-  //     ),
-  //   ).timeout(Duration(seconds: 5));
-  //   return json.decode(response.body)['data'][0]['id_design'];
-  // }
-  // Future<List> getCustomPreset() async{
-  //   final response=await http.get(
-  //     Uri.parse(
-  //         APIBaseURL()+
-  //             getCustomDesign(await getIdPreset())
-  //     ),
-  //   ).timeout(Duration(seconds: 5));
-  //   return json.decode(response.body)['data'];
-  // }
-
   @override
   Widget build(BuildContext context){
     final GoogleSignIn _googleSignIn = GoogleSignIn();
     return WillPopScope(
       onWillPop: () async{
-        return false;
+        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -255,7 +240,7 @@ class _LoginState extends State<Login> {
           builder: (context, snapshot) {
             if(snapshot.hasData){
               return FutureBuilder(
-                future: getCustomPreset(),
+                future: getWhereCustomPreset(widget.id_preset),
                 builder: (context, snapshots) {
                   if(snapshots.hasData){
                     return Stack(
@@ -272,8 +257,8 @@ class _LoginState extends State<Login> {
                                   child: Center(
                                       child: Image.network(
                                         BaseURL()+snapshots.requireData[0]['data'],
-                                        height: 200,
-                                        width: 200,
+                                        height: Percentage(200,widget.preview),
+                                        width: Percentage(200,widget.preview),
                                       )
                                   ),
                                 ),
@@ -281,28 +266,28 @@ class _LoginState extends State<Login> {
                                   style: TextStyle(
                                       color: Color(int.parse("FF"+snapshots.requireData[9]['data'] , radix: 16)),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: double.parse(snapshots.requireData[4]['data'])
+                                      fontSize: Percentage(10,widget.preview)
                                   ),
 
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: Percentage(10,widget.preview),
                                 ),
                                 Container(
                                   color: Color(int.parse("FF"+snapshots.requireData[6]['data'] , radix: 16)),
-                                  height: 50,
+                                  height: Percentage(50,widget.preview),
                                   width: double.infinity,
                                   child: Center(
                                       child: new Text("Login",
                                         style: TextStyle(
                                             color: Color(int.parse("FF"+snapshots.requireData[8]['data'] , radix: 16)),
-                                            fontSize: double.parse(snapshots.requireData[3]['data'])
+                                            fontSize: Percentage(double.parse(snapshots.requireData[3]['data']),widget.preview)
                                         ),
                                       )
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(20.0),
+                                  padding: EdgeInsets.all(Percentage(20,widget.preview)),
                                   child: Container(
                                     width: double.infinity,
                                     decoration: BoxDecoration(
@@ -318,19 +303,25 @@ class _LoginState extends State<Login> {
                                       ],
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(24.0),
+                                      padding: EdgeInsets.all(Percentage(24.0,widget.preview)),
                                       child: SingleChildScrollView(
                                         child: new Column(
                                           children: <Widget>[
                                             Container(
+                                                width: double.maxFinite,
+                                                height: Percentage(50,widget.preview),
                                                 child: TextField(
+                                                  style: TextStyle(
+                                                    fontSize: Percentage(double.parse(snapshots.requireData[2]['data']),widget.preview)
+                                                  ),
                                                   controller: controllerUsername,
                                                   decoration: InputDecoration(
                                                       hintText: 'contoh@gmail.com',
-                                                      prefixIcon: Icon(Icons.mail),
+                                                      prefixIcon: Icon(Icons.mail,size: Percentage(30,widget.preview)),
                                                       labelText: 'Username',
                                                       border: OutlineInputBorder(),
-                                                      suffixIcon: controllerUsername.text.isEmpty ? Container(width: 0,): IconButton(
+                                                      suffixIcon: controllerUsername.text.isEmpty ?
+                                                      Container(width: 0,): IconButton(
                                                         icon: Icon(
                                                             Icons.close,
                                                             color: Colors.red),
@@ -341,48 +332,47 @@ class _LoginState extends State<Login> {
                                                   textInputAction: TextInputAction.done,
                                                 )
                                             ),
-                                            SizedBox(height: 30,),
+                                            SizedBox(height: Percentage(30,widget.preview),),
                                             Container(
+                                                width: double.maxFinite,
+                                                height: Percentage(50,widget.preview),
                                                 child: TextField(
                                                   controller: controllerPassword,
+                                                  style: TextStyle(
+                                                      fontSize: Percentage(double.parse(snapshots.requireData[2]['data']),widget.preview)
+                                                  ),
                                                   decoration: InputDecoration(
                                                       hintText: 'Password...',
-                                                      prefixIcon: Icon(Icons.lock),
+                                                      prefixIcon: Icon(Icons.lock,size: Percentage(30,widget.preview)),
                                                       labelText: 'Password',
                                                       border: OutlineInputBorder(),
-                                                      suffixIcon: IconButton(
-                                                          icon: passenable
-                                                              ? Icon(Icons.visibility_off)
-                                                              : Icon(Icons.visibility),
-                                                          onPressed: () =>
-                                                              setState(() => passenable = !passenable)
-                                                      )
                                                   ),
                                                   obscureText: passenable,
                                                   keyboardType: TextInputType.emailAddress,
                                                   textInputAction: TextInputAction.done,
                                                 )
                                             ),
-                                            SizedBox(height: 30,),
+                                            SizedBox(height: Percentage(30,widget.preview),),
                                             Row(
                                               mainAxisSize: MainAxisSize.max,
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: <Widget>[
                                                 Container(
-                                                  width: 200,
-                                                  height: 50,
+                                                  width: Percentage(200,widget.preview),
+                                                  height: Percentage(50,widget.preview),
                                                   child: ElevatedButton.icon(
                                                     style: ButtonStyle(
-                                                      elevation: MaterialStatePropertyAll(10),
+                                                      elevation: MaterialStatePropertyAll(Percentage(10,widget.preview)),
                                                       backgroundColor: MaterialStateProperty.all(Color(int.parse("FF"+snapshots.requireData[6]['data'] , radix: 16)),),
                                                     ),
                                                     label: Text("Login",
                                                       style: TextStyle(
                                                         fontWeight: FontWeight.bold,
+                                                        fontSize: Percentage(double.parse(snapshots.requireData[2]['data']),widget.preview),
                                                         color: Color(int.parse("FF"+snapshots.requireData[8]['data'] , radix: 16)),
                                                       ),
                                                     ),
-                                                    icon: Icon(Icons.login),
+                                                    icon: Icon(Icons.login,size: Percentage(30,widget.preview),),
                                                     onPressed: () async {
                                                       // Navigator.of(context).push(
                                                       //   new MaterialPageRoute(builder: (BuildContext context) => homepage() )
@@ -393,7 +383,7 @@ class _LoginState extends State<Login> {
                                                 )
                                               ],
                                             ),
-                                            SizedBox(height: 10,),
+                                            SizedBox(height: Percentage(10,widget.preview),),
                                             InkWell(
                                               onTap: () {
                                                 _googleSignIn.signIn().then((value) {
@@ -411,8 +401,8 @@ class _LoginState extends State<Login> {
                                                 });
                                               },
                                               child: Container(
-                                                width: 200,
-                                                height: 50,
+                                                width: Percentage(200,widget.preview),
+                                                height: Percentage(50,widget.preview),
                                                 decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.circular(10),
                                                     color: Colors.white54,
@@ -422,22 +412,23 @@ class _LoginState extends State<Login> {
                                                     )
                                                 ),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(10.0),
+                                                  padding: EdgeInsets.all(Percentage(10.0,widget.preview)),
                                                   child: Row(
                                                     mainAxisSize: MainAxisSize.max,
                                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                     children: <Widget>[
                                                       Image(
                                                         image: AssetImage("assets/img/logo_google.png"),
-                                                        width: 25,
-                                                        height: 25,
+                                                        width: Percentage(25,widget.preview),
+                                                        height: Percentage(25,widget.preview),
                                                         fit: BoxFit.fill,
                                                       ),
                                                       Text(
                                                         "Sign in With Google",
                                                         style: TextStyle(
                                                             color: Colors.black,
-                                                            fontWeight: FontWeight.bold
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: Percentage(double.parse(snapshots.requireData[1]['data']),widget.preview)
                                                         ),
                                                       )
                                                     ],

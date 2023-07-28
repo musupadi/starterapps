@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:project_management/Constant/Size.dart';
 import 'package:project_management/Constant/colors.dart';
 import 'package:project_management/Liblary/Ascendant.dart';
+import 'package:project_management/Loading.dart';
+import 'package:project_management/Profile/Custom.dart';
+import 'package:project_management/Route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Serverside/Server.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -39,146 +44,219 @@ class _ProfileState extends State<Profile> {
   }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: SecondaryColors(),
-        body: ListView(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          physics: BouncingScrollPhysics(),
-          children: [
-            Container(
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(color: Colors.white,width: 1),
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(image_picture)
-                          )
-                      ),
+    return FutureBuilder(
+      future: getCustomPreset(),
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+          return SafeArea(
+            child: Scaffold(
+              backgroundColor: Color(int.parse("FF"+snapshot.requireData[7]['data'] , radix: 16)),
+              body: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                physics: BouncingScrollPhysics(),
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)
                     ),
-                    Text(
-                      nama,
-                      style: TextStyle(
-                        color: PrimaryColors(),
-                        fontWeight: FontWeight.bold,
-                        fontSize: FontSizeLarge()
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      email,
-                      style: TextStyle(
-                          color: PrimaryColors(),
-                          fontSize: FontSizeSmall()
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: PrimaryColors()
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Center(
-                          child: Text(
-                            "Change Password",
-                            style: TextStyle(
-                              color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(color: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),width: 1),
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(image_picture == null || image_picture == "null" ? BaseURL()+snapshot.requireData[0]['data'] : image_picture)
+                                )
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: PrimaryColors()
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Center(
-                          child: Text(
-                            "Setting",
+                          Text(
+                            nama,
                             style: TextStyle(
-                              color: Colors.white,
+                                color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: double.parse(snapshot.requireData[4]['data'])
                             ),
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: PrimaryColors()
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Center(
-                          child: Text(
-                            "Privacy Policy",
+                          Text(
+                            email,
                             style: TextStyle(
-                              color: Colors.white,
+                                color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                                fontSize: double.parse(snapshot.requireData[1]['data'])
                             ),
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        LogoutMessage("Logout", "Are You Sure want to Logout ?", context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.red
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Center(
-                            child: Text(
-                                "Logout",
-                                style: TextStyle(
-                                  color: Colors.white,
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Center(
+                                child: Text(
+                                  "Change Password",
+                                  style: TextStyle(
+                                    color: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),
+                                  ),
                                 ),
+                              ),
                             ),
                           ),
-                        ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Center(
+                                child: Text(
+                                  "Setting",
+                                  style: TextStyle(
+                                    color: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Visibility(
+                            visible: level=="admin" ? true : false,
+                            child: InkWell(
+                              onTap: () {
+                                toCustom(context);
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Center(
+                                        child: Text(
+                                          "Custom Design",
+                                          style: TextStyle(
+                                            color: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                            visible: level=="admin" ? true : false,
+                            child: InkWell(
+                              onTap: () {
+                                toDomain(context);
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Center(
+                                        child: Text(
+                                          "Whitelist Domain",
+                                          style: TextStyle(
+                                            color: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Center(
+                                child: Text(
+                                  "Privacy Policy",
+                                  style: TextStyle(
+                                    color: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              LogoutMessage("Logout", "Are You Sure want to Logout ?", context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.red
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Center(
+                                  child: Text(
+                                    "Logout",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+
+                ],
               ),
             ),
-
-          ],
-        ),
-      ),
+          );
+        }else{
+          return Loading();
+        }
+      },
     );
   }
 }
