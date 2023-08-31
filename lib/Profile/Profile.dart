@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_management/Constant/Size.dart';
 import 'package:project_management/Constant/colors.dart';
 import 'package:project_management/Liblary/Ascendant.dart';
+import 'package:project_management/Liblary/SharedPreferance.dart';
 import 'package:project_management/Loading.dart';
 import 'package:project_management/Profile/Custom.dart';
 import 'package:project_management/Route.dart';
@@ -66,34 +67,49 @@ class _ProfileState extends State<Profile> {
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: [
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                border: Border.all(color: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),width: 1),
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(image_picture == null || image_picture == "null" ? BaseURL()+snapshot.requireData[0]['data'] : image_picture)
-                                )
-                            ),
+                          FutureBuilder(
+                            future: SharedImagePciture(),
+                            builder: (context, Image) {
+                              return Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(color: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),width: 1),
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(Image.requireData == null || Image.requireData == "null" ? BaseURL()+snapshot.requireData[0]['data'] : Image.requireData)
+                                    )
+                                ),
+                              );
+                            },
                           ),
-                          Text(
-                            nama,
-                            style: TextStyle(
-                                color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
-                                fontWeight: FontWeight.bold,
-                                fontSize: double.parse(snapshot.requireData[4]['data'])
-                            ),
-                            textAlign: TextAlign.center,
+                          FutureBuilder(
+                            future: SharedUserNama(),
+                            builder: (context, name) {
+                              return Text(
+                                name.requireData,
+                                style: TextStyle(
+                                    color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: double.parse(snapshot.requireData[4]['data'])
+                                ),
+                                textAlign: TextAlign.center,
+                              );
+                            },
                           ),
-                          Text(
-                            email,
-                            style: TextStyle(
-                                color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
-                                fontSize: double.parse(snapshot.requireData[1]['data'])
-                            ),
-                            textAlign: TextAlign.center,
+                          FutureBuilder(
+                            future: SharedUserEmail(),
+                            builder: (context, Email) {
+                              return Text(
+                                Email.requireData,
+                                style: TextStyle(
+                                    color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                                    fontSize: double.parse(snapshot.requireData[1]['data'])
+                                ),
+                                textAlign: TextAlign.center,
+                              );
+                            },
                           ),
                           SizedBox(
                             height: 10,

@@ -12,6 +12,7 @@ import 'package:project_management/Dashboard.dart';
 import 'package:project_management/Loading.dart';
 import 'package:project_management/LoginIn.dart';
 import 'package:http/http.dart' as http;
+import 'package:project_management/Serverside/APIData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Constant/colors.dart';
 import 'Liblary/Ascendant.dart';
@@ -50,49 +51,7 @@ class _LoginState extends State<Login> {
   TextEditingController controllerPassword = new TextEditingController();
   TextEditingController controllerPassword2 = new TextEditingController();
   bool isLoading = false;
-  LoginSuccess (String name){
-    AwesomeDialog(
-        context: context,
-        dismissOnTouchOutside: true,
-        dismissOnBackKeyPress: false,
-        dialogType: DialogType.success,
-        animType: AnimType.scale,
-        title: "Login Succes",
-        desc: "Selamat Datang "+name,
-        btnOkOnPress: () {
-          Navigator.push(
-              context,
-              PageRouteBuilder(
-                  transitionDuration: Duration(seconds: 1),
-                  transitionsBuilder: (
-                      BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secAnimation,
-                      Widget child) {
-                    animation = CurvedAnimation(
-                        parent: animation,
-                        curve: Curves.elasticInOut
-                    );
-                    return ScaleTransition(
-                      scale: animation,
-                      child: child,
-                      alignment: Alignment.center,
-                    );
-                  },
-                  pageBuilder: (
-                      BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secAnimation
-                      )
-                  {
-                    return Dashboard();
-                  }
-              )
-          );
-        },
-        headerAnimationLoop: false
-    )..show();
-  }
+
   GmailRegister(String email,String password,String nama,String ImagePicture) async {
     int timeout = 5;
     setState(() => isLoading=true);
@@ -121,7 +80,7 @@ class _LoginState extends State<Login> {
         // String? level = prefs.getString("level");
         // String? nama = prefs.getString("nama_user");
         // String? id_user = prefs.getString("id_user");
-        LoginSuccess(nama.toString());
+        LoginSuccess(context,nama.toString());
       }else{
         FailedMessage("Terjadi Kesalahan", jsonDecode(response.body)['Message'].toString(), context);
       }
@@ -164,7 +123,7 @@ class _LoginState extends State<Login> {
         // String? level = prefs.getString("level");
         String? s = prefs.getString("nama");
         // String? id_user = prefs.getString("id_user");
-        LoginSuccess(s.toString());
+        LoginSuccess(context,s.toString());
       }else{
         setState(() => isLoading=false);
         AwesomeDialog(
@@ -384,10 +343,7 @@ class _LoginState extends State<Login> {
                                                     ),
                                                     icon: Icon(Icons.login),
                                                     onPressed: () async {
-                                                      // Navigator.of(context).push(
-                                                      //   new MaterialPageRoute(builder: (BuildContext context) => homepage() )
-                                                      // );
-                                                      // Logins();
+                                                      LoginData(context,controllerUsername.text,controllerPassword.text);
                                                     },
                                                   ),
                                                 )

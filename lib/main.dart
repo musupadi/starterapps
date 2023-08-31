@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:project_management/Liblary/Ascendant.dart';
 import 'package:project_management/Loading.dart';
 import 'package:project_management/LoginIn.dart';
 
 import 'Constant/colors.dart';
 import 'Login.dart';
-
+import 'dart:ui' as ui;
 void main() {
+  RenderErrorBox.backgroundColor = Colors.transparent;
+  RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
   runApp(const MyApp());
 }
 

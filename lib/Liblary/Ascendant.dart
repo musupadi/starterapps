@@ -11,9 +11,14 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:http/http.dart' as http;
 import '../Constant/Size.dart';
+import '../Constant/colors.dart';
+import '../Dashboard.dart';
 import '../Route.dart';
 import '../Serverside/API.dart';
 import '../Serverside/Server.dart';
+
+//DateMaker
+DateTime? selectedDate;
 final String _adUnitId = Platform.isAndroid
     ? 'ca-app-pub-3940256099942544/1033173712'
     : 'ca-app-pub-3940256099942544/4411468910';
@@ -76,6 +81,68 @@ Widget NotFound(String text){
       ),
     ),
   );
+}
+Future<String> selectDate(BuildContext context) async {
+  final DateTime? picked = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2100),
+  );
+  if (picked != null && picked != selectedDate) {
+    return picked.toString();
+    // setState(() {
+    //   print("Zyarga Debugger "+picked.toString());
+    //   selectedDate = picked;
+    //   DateController.text = DateBuilder( selectedDate.toString());
+    // });
+  }else{
+    return "";
+  }
+}
+
+LoginSuccess (BuildContext context,String name){
+  AwesomeDialog(
+      context: context,
+      dismissOnTouchOutside: true,
+      dismissOnBackKeyPress: false,
+      dialogType: DialogType.success,
+      animType: AnimType.scale,
+      title: "Login Succes",
+      desc: "Selamat Datang "+name,
+      btnOkOnPress: () {
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+                transitionDuration: Duration(seconds: 1),
+                transitionsBuilder: (
+                    BuildContext context,
+                    Animation<double> animation,
+                    Animation<double> secAnimation,
+                    Widget child) {
+                  animation = CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.elasticInOut
+                  );
+                  return ScaleTransition(
+                    scale: animation,
+                    child: child,
+                    alignment: Alignment.center,
+                  );
+                },
+                pageBuilder: (
+                    BuildContext context,
+                    Animation<double> animation,
+                    Animation<double> secAnimation
+                    )
+                {
+                  return Dashboard();
+                }
+            )
+        );
+      },
+      headerAnimationLoop: false
+  )..show();
 }
 FailedMessage (String title,String desc,BuildContext context){
   AwesomeDialog(
@@ -588,7 +655,49 @@ double Percentage(double Value,bool preview){
     return Value;
   }
 }
-
+Widget ProgressBar(BuildContext context,double progress,int idStyle) {
+  final Brightness brightness = Theme.of(context).brightness;
+  return Stack(children: <Widget>[
+    Padding(
+        padding: EdgeInsets.only(left: 10,right: 10),
+        child: Center(
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: SizedBox(
+                    height: 40,
+                    child: SfLinearGauge(
+                      showTicks: false,
+                      showLabels: false,
+                      animateAxis: true,
+                      axisTrackStyle: LinearAxisTrackStyle(
+                        thickness: 40,
+                        edgeStyle: LinearEdgeStyle.bothCurve,
+                        borderWidth: 1,
+                        borderColor: brightness == Brightness.dark
+                            ? const Color(0xff898989)
+                            : Colors.grey[350],
+                        color: brightness == Brightness.dark
+                            ? Colors.transparent
+                            : Colors.grey[350],
+                      ),
+                      barPointers: <LinearBarPointer>[
+                        LinearBarPointer(
+                            value: progress,
+                            thickness: 40,
+                            edgeStyle: LinearEdgeStyle.bothCurve,
+                            color: StyleColors(idStyle)),
+                      ],
+                    ))))),
+    Align(
+        alignment: Alignment.centerLeft,
+        child: Padding(
+            padding: EdgeInsets.only(top: 10,left: 20,right: 20),
+            child: Text(
+              progress.toStringAsFixed(2) + '%',
+              style: const TextStyle(fontSize: 14, color: Color(0xffFFFFFF)),
+            ))),
+  ]);
+}
 
 //Get Data
 Future<String> getIdPreset() async{
@@ -636,4 +745,6 @@ Future<List> getListCategory(String id_preset) async{
   ).timeout(Duration(seconds: 5));
   return json.decode(response.body)['data'];
 }
+
+
 
