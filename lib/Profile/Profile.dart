@@ -154,6 +154,31 @@ class _ProfileState extends State<Profile> {
                           SizedBox(
                             height: 10,
                           ),
+                          InkWell(
+                            onTap: () {
+                              
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(int.parse("FF"+snapshot.requireData[6]['data'] , radix: 16)),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Center(
+                                  child: Text(
+                                    "User management",
+                                    style: TextStyle(
+                                      color: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Visibility(
                             visible: level=="admin" ? true : false,
                             child: InkWell(
