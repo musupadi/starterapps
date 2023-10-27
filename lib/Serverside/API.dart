@@ -1,42 +1,52 @@
 String RegisterGmail(){
-  return "projectmanagement/registergmail";
+  return "management/registergmail";
 }
 String LoginGmail(){
-  return "projectmanagement/logingmail";
+  return "management/logingmail";
 }
 String Login(){
-  return "projectmanagement/login";
+  return "management/login";
 }
 
 
 //Customized
 String DataDesign(){
-  return "projectmanagement/design";
+  return "management/design";
 }
 
 String DataDomain(){
-  return "projectmanagement/domain";
+  return "management/domain";
 }
 String getDesign(){
-  return "projectmanagement/designdata";
+  return "management/designdata";
 }
 String getCustomDesign(String id){
-  return "projectmanagement/customdesign?id_preset=$id";
+  return "management/customdesign?id_preset=$id";
 }
 String getPresetList(String id){
-  return "projectmanagement/listpreset?id_design=$id";
+  return "management/listpreset?id_design=$id";
 }
 String getCategory(String id_preset){
   return "listcategory?id_design_detail=$id_preset";
 }
 String UpdateCustomDesign(){
-  return "projectmanagement/updatecustomdesign";
+  return "management/updatecustomdesign";
 }
-String StringReadProject(String id_user){
-  return "project/read?id_user=$id_user";
+
+
+//Project
+String StringReadProject(String id_user,String status){
+  return "project/read?id_user=$id_user&status=$status";
 }
-String StringWhereReadProject(String id_user,String id_project){
-  return "project/read?id_user=$id_user&id_project=$id_project";
+String StringGetNamaProject(String nama){
+  return "project/getnama=$nama";
+}
+
+
+
+
+String StringWhereReadProject(String id_user,String id_project,String status){
+  return "project/read?id_user=$id_user&id_project=$id_project&status=$status";
 }
 String StringReadTask(String id_user,String id_project){
   return "task/read?id_user=$id_user&id_project=$id_project";
@@ -44,8 +54,8 @@ String StringReadTask(String id_user,String id_project){
 String StringWhereReadRealization(String id_user,String id_task){
   return "realization/read?id_user=$id_user&id_task=$id_task";
 }
-String StringProgressProject(String id_project,String id_user){
-  return "project/progress?id_project=$id_project&id_user=$id_user";
+String StringProgressProject(String id_project,String id_user,String status){
+  return "project/progress?id_project=$id_project&id_user=$id_user,$status";
 }
 String StringProgressTask(String id_task,String id_user){
   return "task/progress?id_task=$id_task&id_user=$id_user";

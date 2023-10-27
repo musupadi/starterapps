@@ -84,7 +84,6 @@ class _AddTaskState extends State<AddTask> {
                   ),
                 ),
               ),
-
               //PM
               SizedBox(
                 height: 5,
@@ -187,7 +186,6 @@ class _AddTaskState extends State<AddTask> {
                   }
                 },
               ),
-
               //Note
               SizedBox(
                 height: 5,
@@ -223,8 +221,6 @@ class _AddTaskState extends State<AddTask> {
                   ),
                 ),
               ),
-
-
               //StartDate
               SizedBox(
                 height: 5,
@@ -270,7 +266,6 @@ class _AddTaskState extends State<AddTask> {
                   ),
                 ),
               ),
-
               //End Date
               SizedBox(
                 height: 5,

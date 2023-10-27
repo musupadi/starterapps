@@ -1,6 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:project_management/Constant/colors.dart';
+import 'package:project_management/Home/Home.dart';
 import 'package:project_management/Loading.dart';
 import 'package:project_management/MyWork/MyWork.dart';
 import 'package:project_management/Profile/Profile.dart';
@@ -34,7 +35,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   final List<Widget>tabs = [
-    Container(),
+    Home(),
     MyWork(),
     Profile(),
   ];
@@ -58,7 +59,7 @@ class _DashboardState extends State<Dashboard> {
                       child: tabs[_currentIndex]
                   ),
                   bottomNavigationBar: ConvexAppBar.badge(
-                    const <int,dynamic>{4:'99+'},
+                    const <int,dynamic>{4:''},
                     style: TabStyle.custom,
                     backgroundColor: Color(int.parse("FF"+snapshot.requireData[8]['data'] , radix: 16)),
                     color: PrimaryColors(),

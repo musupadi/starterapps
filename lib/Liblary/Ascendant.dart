@@ -707,6 +707,7 @@ Future<String> getIdPreset() async{
             getDesign()
     ),
   ).timeout(Duration(seconds: 5));
+  print("test");
   return json.decode(response.body)['data'][0]['id_design'];
 }
 Future<List> getCustomPreset() async{
@@ -716,6 +717,29 @@ Future<List> getCustomPreset() async{
             getCustomDesign(await getIdPreset())
     ),
   ).timeout(Duration(seconds: 5));
+  print(json.decode(response.body)['data']);
+  return json.decode(response.body)['data'];
+}
+
+//Testing
+Future<String> TestinggetIDPreset(BuildContext context) async{
+  final response=await http.get(
+    Uri.parse(
+        APIBaseURL()+
+            getDesign()
+    ),
+  ).timeout(Duration(seconds: 5));
+  Message(response.toString(), context);
+  return json.decode(response.body)['data'][0]['id_design'];
+}
+Future<List> TestinggetCustomPreset(BuildContext context) async{
+  final response=await http.get(
+    Uri.parse(
+        APIBaseURL()+
+            getCustomDesign(await TestinggetIDPreset(context))
+    ),
+  ).timeout(Duration(seconds: 5));
+  Message(response.toString(), context);
   return json.decode(response.body)['data'];
 }
 Future<List> getWhereCustomPreset(String idPreset) async{

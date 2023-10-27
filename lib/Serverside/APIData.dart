@@ -135,11 +135,20 @@ CreateRealization(BuildContext context,String id_task,String progress,String not
     Message("Terjadi Kesalahan pada $_", context);
   }
 }
+Future<List> getProjectNama(String nama) async{
+  final response=await http.get(
+    Uri.parse(
+        APIBaseURL()+
+            StringGetNamaProject(nama)
+    ),
+  ).timeout(Duration(seconds: 10));
+  return json.decode(response.body)['data'];
+}
 Future<List> ReadProject() async{
   final response=await http.get(
     Uri.parse(
         APIBaseURL()+
-            StringReadProject(await SharedUserId())
+            StringReadProject(await SharedUserId(),"1")
     ),
   ).timeout(Duration(seconds: 10));
   return json.decode(response.body)['data'];
@@ -148,7 +157,7 @@ Future<List> WhereReadProject(String id_project) async{
   final response=await http.get(
     Uri.parse(
         APIBaseURL()+
-            StringWhereReadProject(await SharedUserId(),id_project)
+            StringWhereReadProject(await SharedUserId(),id_project,"1")
     ),
   ).timeout(Duration(seconds: 10));
   return json.decode(response.body)['data'];
@@ -176,7 +185,7 @@ Future<dynamic> ProjectProgress(String id_project) async{
   final response=await http.get(
     Uri.parse(
         APIBaseURL()+
-            StringProgressProject(id_project,await SharedUserId())
+            StringProgressProject(id_project,await SharedUserId(),"1")
     ),
   ).timeout(Duration(seconds: 5));
   String data = json.decode(response.body)['Progress'].toString();

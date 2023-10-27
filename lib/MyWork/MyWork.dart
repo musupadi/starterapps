@@ -44,6 +44,26 @@ class _MyWorkState extends State<MyWork> {
                 scrollDirection: Axis.vertical,
                 physics: BouncingScrollPhysics(),
                 children: [
+                  InkWell(
+                    onTap: () {
+                      // toAddProject(context);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 10,right: 10,top: 10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Center(
+                          child: Text(
+                              "Gantt Chart"
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Visibility(
                     visible: level == "owner" ? true :false,
                     child: InkWell(
