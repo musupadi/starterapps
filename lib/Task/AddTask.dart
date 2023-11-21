@@ -80,9 +80,61 @@ class _AddTaskState extends State<AddTask> {
                       hintText: 'Task Name',
                       border: InputBorder.none,
                     ),
+                    onChanged: (value) {
+                      setState(() {
+
+                      });
+                    },
                     keyboardType: TextInputType.name,
                   ),
                 ),
+              ),
+              FutureBuilder(
+                future: SearchProjectName(TaskName.text),
+                builder: (context, pm) {
+                  if(pm.hasData){
+                    return ListView.builder(
+                      itemCount: pm.requireData.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              TaskName.text = pm.requireData[index]['name'];
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 500),
+                            margin: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: TaskName.text == pm.requireData[index]['name'] ? Colors.red : Colors.white,
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    pm.requireData[index]['name'],
+                                    style: TextStyle(
+                                        color: TaskName.text == pm.requireData[index]['name'] ? Colors.white : Colors.black,
+                                        fontSize: FontSizeLarge()
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                        // bool pilih=false;
+                        // return UserAdapter(IDUser: PMID, id_user: pm.requireData[index]['id_user'], nama: pm.requireData[index]['nama'], level: pm.requireData[index]['level']);
+                      },
+                    );
+                  }else{
+                    return LoadingAwaitData();
+                  }
+                },
               ),
               //PM
               SizedBox(

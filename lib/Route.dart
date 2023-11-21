@@ -9,6 +9,7 @@ import 'package:project_management/Profile/InputColorPickerCostumized.dart';
 import 'package:project_management/Profile/InputFotoCostumized.dart';
 import 'package:project_management/Profile/Preset.dart';
 import 'package:project_management/Project/AddProject.dart';
+import 'package:project_management/Project/GanttChartProject.dart';
 import 'package:project_management/Task/AddTask.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -295,6 +296,37 @@ void toMyTask(BuildContext context,String id_project) async{
               )
           {
             return MyTask(id_project: id_project);
+          }
+      )
+  );
+}
+void toGanttChartPlanning(BuildContext context,String id_project) async {
+  Navigator.push(
+      context,
+      PageRouteBuilder(
+          transitionDuration: Duration(seconds: 1),
+          transitionsBuilder: (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secAnimation,
+              Widget child) {
+            animation = CurvedAnimation(
+                parent: animation,
+                curve: Curves.elasticInOut
+            );
+            return ScaleTransition(
+              scale: animation,
+              child: child,
+              alignment: Alignment.center,
+            );
+          },
+          pageBuilder: (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secAnimation
+              )
+          {
+            return GanttChartProject(id_project: id_project);
           }
       )
   );

@@ -26,6 +26,7 @@ class MyTask extends StatefulWidget {
 class _MyTaskState extends State<MyTask> {
 
   String level = "staff";
+  String stat = "0";
   @override
   void initState() {
     // TODO: implement initState
@@ -58,7 +59,7 @@ class _MyTaskState extends State<MyTask> {
                       children: [
                         InkWell(
                           onTap: () {
-
+                            toGanttChartPlanning(context, widget.id_project);
                           },
                           child: Container(
                             margin: EdgeInsets.only(left: 10,right: 10,top: 10),
@@ -76,10 +77,11 @@ class _MyTaskState extends State<MyTask> {
                             ),
                           ),
                         ),
+
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)
                           ),
                           margin: EdgeInsets.all(10),
                           child: Padding(
@@ -87,10 +89,10 @@ class _MyTaskState extends State<MyTask> {
                             child: Column(
                               children: [
                                 Text(
-                                    project.requireData[0]['name'],
-                                    style: TextStyle(
+                                  project.requireData[0]['name'],
+                                  style: TextStyle(
                                       fontSize: 25
-                                    ),
+                                  ),
                                 ),
                                 Container(
                                   color: Colors.red,
@@ -102,12 +104,12 @@ class _MyTaskState extends State<MyTask> {
                                     Container(
                                       width: 100,
                                       child: Text(
-                                        "Owner"
+                                          "Owner"
                                       ),
                                     ),
                                     Expanded(
                                         child: Text(
-                                          ": "+project.requireData[0]['ownerNama']
+                                            ": "+project.requireData[0]['ownerNama']
                                         )
                                     )
                                   ],
@@ -120,7 +122,7 @@ class _MyTaskState extends State<MyTask> {
                                 ),
                                 SizedBox(height: 5,),
                                 FutureBuilder(
-                                  future: ProjectProgress(widget.id_project),
+                                  future: ProjectProgress(widget.id_project,"0"),
                                   builder: (context, snapshot){
                                     if(snapshot.hasData){
                                       return ProgressBar(context, double.parse(snapshot.requireData), _random.nextInt(StyleCount()));
@@ -136,6 +138,7 @@ class _MyTaskState extends State<MyTask> {
                             ),
                           ),
                         ),
+
                         Visibility(
                           visible: level == "pm" ? true : false,
                           child: InkWell(
@@ -158,6 +161,88 @@ class _MyTaskState extends State<MyTask> {
                               ),
                             ),
                           ),
+                        ),
+                        Visibility(
+                          visible: level == "pm" ? true : false,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text("Project Selesai ?"),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(50)
+                                ),
+                                margin: EdgeInsets.all(10),
+                                child: Row(
+                                 children: [
+                                   Expanded(
+                                     flex: 1,
+                                     child: InkWell(
+                                       onTap: () {
+                                         setState(() {
+                                            UpdateStatusProject(context, project.requireData[0]['id_project'], "1");
+                                         });
+                                         // toAddTask(context,widget.id_project);
+                                       },
+                                       child: AnimatedContainer(
+                                         duration: Duration(milliseconds: 500),
+                                         margin: EdgeInsets.only(left: 10,right: 10,top: 10),
+                                         decoration: BoxDecoration(
+                                             color: project.requireData[0]['status'] == "1" ? Colors.red : Colors.white ,
+                                             borderRadius: BorderRadius.circular(50)
+                                         ),
+                                         child: Padding(
+                                           padding: const EdgeInsets.all(10.0),
+                                           child: Center(
+                                             child: Text(
+                                               "Progress",
+                                               style: TextStyle(
+                                                 color:  project.requireData[0]['status'] == "1" ? Colors.white: Colors.black ,
+                                               ),
+                                             ),
+                                           ),
+                                         ),
+                                       ),
+                                     ),
+                                   ),
+                                   Expanded(
+                                     flex: 1,
+                                     child: InkWell(
+                                       onTap: () {
+                                         setState(() {
+                                           UpdateStatusProject(context, project.requireData[0]['id_project'], "2");
+                                         });
+                                         // toAddTask(context,widget.id_project);
+                                       },
+                                       child: AnimatedContainer(
+                                         duration: Duration(milliseconds: 500),
+                                         margin: EdgeInsets.only(left: 10,right: 10,top: 10),
+                                         decoration: BoxDecoration(
+                                             color: project.requireData[0]['status'] == "2" ? Colors.red : Colors.white ,
+                                             borderRadius: BorderRadius.circular(50)
+                                         ),
+                                         child: Padding(
+                                           padding: const EdgeInsets.all(10.0),
+                                           child: Center(
+                                             child: Text(
+                                                 "Finish",
+                                               style: TextStyle(
+                                                 color: project.requireData[0]['status'] == "2" ? Colors.white: Colors.black ,
+                                              ),
+                                             ),
+                                           ),
+                                         ),
+                                       ),
+                                     ),
+                                   ),
+                                 ],
+                                ),
+                              ),
+                            ],
+                          )
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 10,right: 10,top: 10),

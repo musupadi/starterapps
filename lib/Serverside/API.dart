@@ -42,9 +42,6 @@ String StringGetNamaProject(String nama){
   return "project/getnama=$nama";
 }
 
-
-
-
 String StringWhereReadProject(String id_user,String id_project,String status){
   return "project/read?id_user=$id_user&id_project=$id_project&status=$status";
 }
@@ -55,7 +52,7 @@ String StringWhereReadRealization(String id_user,String id_task){
   return "realization/read?id_user=$id_user&id_task=$id_task";
 }
 String StringProgressProject(String id_project,String id_user,String status){
-  return "project/progress?id_project=$id_project&id_user=$id_user,$status";
+  return "project/progress?id_project=$id_project&id_user=$id_user&status=$status";
 }
 String StringProgressTask(String id_task,String id_user){
   return "task/progress?id_task=$id_task&id_user=$id_user";
@@ -63,6 +60,17 @@ String StringProgressTask(String id_task,String id_user){
 String StringSearchUser(String nama,String level){
   return "user/search?nama=$nama&level=$level";
 }
+String StringSearchProjectName(String name){
+  return "project/getnama?name=$name";
+}
+String StringSearchTaskName(String name){
+  return "task/getnama?name=$name";
+}
+String StringUpdateStatusProject(String id_project,String status){
+  return "project/changestatus?id_project=$id_project&level=$status";
+}
+
+
 String StringCreateProject(){
   return "project/create";
 }

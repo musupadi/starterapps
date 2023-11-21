@@ -151,14 +151,14 @@ class _ProjectAdapterState extends State<ProjectAdapter> {
                 ),
               ),
               FutureBuilder(
-                future: ProjectProgress(widget.id_project),
+                future: ProjectProgress(widget.id_project,"0"),
                 builder: (context, snapshot){
                   if(snapshot.hasData){
-                    return ProgressBar(context, double.parse(snapshot.requireData), _random.nextInt(StyleCount()));
+                    // return Text(snapshot.requireData);
+                    return ProgressBar(context, double.parse(snapshot.requireData=="Project Tidak Terbaca" ? 0 : snapshot.requireData), _random.nextInt(StyleCount()));
                   }else if(snapshot.hasError){
                     return ProgressBar(context, 0, 1);
                   }else{
-                    print("Zyarga Debugger Check : "+snapshot.requireData.toString());
                     return ProgressBar(context, 0, 1);
                   }
                 },

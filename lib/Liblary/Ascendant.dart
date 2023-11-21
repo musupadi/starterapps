@@ -657,46 +657,48 @@ double Percentage(double Value,bool preview){
 }
 Widget ProgressBar(BuildContext context,double progress,int idStyle) {
   final Brightness brightness = Theme.of(context).brightness;
-  return Stack(children: <Widget>[
-    Padding(
-        padding: EdgeInsets.only(left: 10,right: 10),
-        child: Center(
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: SizedBox(
-                    height: 40,
-                    child: SfLinearGauge(
-                      showTicks: false,
-                      showLabels: false,
-                      animateAxis: true,
-                      axisTrackStyle: LinearAxisTrackStyle(
-                        thickness: 40,
-                        edgeStyle: LinearEdgeStyle.bothCurve,
-                        borderWidth: 1,
-                        borderColor: brightness == Brightness.dark
-                            ? const Color(0xff898989)
-                            : Colors.grey[350],
-                        color: brightness == Brightness.dark
-                            ? Colors.transparent
-                            : Colors.grey[350],
-                      ),
-                      barPointers: <LinearBarPointer>[
-                        LinearBarPointer(
-                            value: progress,
-                            thickness: 40,
-                            edgeStyle: LinearEdgeStyle.bothCurve,
-                            color: StyleColors(idStyle)),
-                      ],
-                    ))))),
-    Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-            padding: EdgeInsets.only(top: 10,left: 20,right: 20),
-            child: Text(
-              progress.toStringAsFixed(2) + '%',
-              style: const TextStyle(fontSize: 14, color: Color(0xffFFFFFF)),
-            ))),
-  ]);
+  return Container(
+    child: Stack(children: <Widget>[
+      Padding(
+          padding: EdgeInsets.only(left: 10,right: 10),
+          child: Center(
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: SizedBox(
+                      height: 40,
+                      child: SfLinearGauge(
+                        showTicks: false,
+                        showLabels: false,
+                        animateAxis: true,
+                        axisTrackStyle: LinearAxisTrackStyle(
+                          thickness: 40,
+                          edgeStyle: LinearEdgeStyle.bothCurve,
+                          borderWidth: 1,
+                          borderColor: brightness == Brightness.dark
+                              ? const Color(0xff898989)
+                              : Colors.grey[350],
+                          color: brightness == Brightness.dark
+                              ? Colors.transparent
+                              : Colors.grey[350],
+                        ),
+                        barPointers: <LinearBarPointer>[
+                          LinearBarPointer(
+                              value: progress,
+                              thickness: 40,
+                              edgeStyle: LinearEdgeStyle.bothCurve,
+                              color: StyleColors(idStyle)),
+                        ],
+                      ))))),
+      Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+              padding: EdgeInsets.only(top: 10,left: 20,right: 20),
+              child: Text(
+                progress.toStringAsFixed(2) + '%',
+                style: const TextStyle(fontSize: 14, color: Color(0xffFFFFFF)),
+              ))),
+    ]),
+  );
 }
 
 //Get Data

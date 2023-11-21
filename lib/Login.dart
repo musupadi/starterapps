@@ -15,6 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:project_management/Serverside/APIData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Constant/colors.dart';
+import 'Home/Home.dart';
 import 'Liblary/Ascendant.dart';
 import 'Serverside/API.dart';
 import 'Serverside/Server.dart';
@@ -40,11 +41,47 @@ class _LoginState extends State<Login> {
     ).timeout(Duration(seconds: 5));
     return json.decode(response.body)['data'];
   }
+  Checker() async{
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('id_user');
+    if(token !=null){
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 0),
+              transitionsBuilder: (
+                  BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secAnimation,
+                  Widget child) {
+                animation = CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.elasticInOut
+                );
+                return ScaleTransition(
+                  scale: animation,
+                  child: child,
+                  alignment: Alignment.center,
+                );
+              },
+              pageBuilder: (
+                  BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secAnimation
+                  )
+              {
+                return Dashboard();
+              }
+          )
+      );
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getDomain();
+    Checker();
   }
   bool passenable = true; //boolean value to track password view enable disable.
   TextEditingController controllerUsername = new TextEditingController();
