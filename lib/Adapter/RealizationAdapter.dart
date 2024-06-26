@@ -167,7 +167,7 @@ class _RealizationAdapterState extends State<RealizationAdapter> {
                       fontWeight: FontWeight.bold
                   ),
                 ),
-                ProgressBar(context, double.parse(widget.progress), _random.nextInt(StyleCount())),
+                ProgressBar(context, double.parse(widget.progress) !>100.00 ? 100 : double.parse(widget.progress), _random.nextInt(StyleCount())),
               ],
             )
         ),

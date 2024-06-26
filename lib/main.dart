@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
                   fontFamily: 'gotham'
               ),
               debugShowCheckedModeBanner: false,
-              home: Loading()
+              home: Login()
           );
         }
       },

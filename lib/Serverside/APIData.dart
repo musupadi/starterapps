@@ -135,22 +135,32 @@ CreateRealization(BuildContext context,String id_task,String progress,String not
     Message("Terjadi Kesalahan pada $_", context);
   }
 }
-UpdateStatusProject(BuildContext context,String id_project,String status) async{
+UpdateStatusProject(BuildContext context,String id_project,String level,String status) async{
   try{
-    final url = Uri.parse(APIBaseURL()+StringUpdateStatusProject(id_project, status));
+    final url = Uri.parse(APIBaseURL()+StringUpdateStatusProject());
     final request = http.MultipartRequest('POST', url);
     request.fields['id_project'] = id_project;
+    request.fields['level'] = level;
     request.fields['status'] = status;
     final response = await request.send();
     final respStr = await response.stream.bytesToString();
     if(jsonDecode(respStr)['code'] == 0){
-      Message(jsonDecode(respStr)['Message'], context);
+
     }else{
-      Message(jsonDecode(respStr)['Message'], context);
+      Message("Terjadi Error pada : "+jsonDecode(respStr)['Message'], context);
     }
   }on Exception catch (_){
     Message("Terjadi Kesalahan pada $_", context);
   }
+}
+Future<List> getReadAllUser() async{
+  final response=await http.get(
+    Uri.parse(
+        APIBaseURL()+
+            StringUserReadAll()
+    ),
+  ).timeout(Duration(seconds: 10));
+  return json.decode(response.body)['data'];
 }
 Future<List> getProjectNama(String nama) async{
   final response=await http.get(

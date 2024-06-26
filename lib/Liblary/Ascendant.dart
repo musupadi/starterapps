@@ -605,12 +605,22 @@ double CalculatePercentage(double value,double total){
   double percentage=(value) / (total) * 100;
   return percentage;
 }
-
+int DateDay(String date){
+  int Day=int.parse(date.substring(8,10));
+  return Day;
+}
+int DateMonth(String Date){
+  int Month=int.parse(Date.substring(5,7));
+  return Month;
+}
+int DateYear(String Date){
+  int Year=int.parse(Date.substring(0,4));
+  return Year;
+}
 String DateBuilder(String Date){
   String Year=Date.substring(0,4);
   String Month=Date.substring(5,7);
   String Day=Date.substring(8,10);
-  
   return Day+" "+MonthChanger(Month)+" "+Year;
   
 }

@@ -60,14 +60,17 @@ String StringProgressTask(String id_task,String id_user){
 String StringSearchUser(String nama,String level){
   return "user/search?nama=$nama&level=$level";
 }
+String StringUserReadAll(){
+  return "user/readall";
+}
 String StringSearchProjectName(String name){
   return "project/getnama?name=$name";
 }
 String StringSearchTaskName(String name){
   return "task/getnama?name=$name";
 }
-String StringUpdateStatusProject(String id_project,String status){
-  return "project/changestatus?id_project=$id_project&level=$status";
+String StringUpdateStatusProject(){
+  return "project/changestatus";
 }
 
 

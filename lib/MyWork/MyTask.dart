@@ -77,7 +77,6 @@ class _MyTaskState extends State<MyTask> {
                             ),
                           ),
                         ),
-
                         Container(
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -121,18 +120,21 @@ class _MyTaskState extends State<MyTask> {
                                   height: 1,
                                 ),
                                 SizedBox(height: 5,),
-                                FutureBuilder(
-                                  future: ProjectProgress(widget.id_project,"0"),
-                                  builder: (context, snapshot){
-                                    if(snapshot.hasData){
-                                      return ProgressBar(context, double.parse(snapshot.requireData), _random.nextInt(StyleCount()));
-                                    }else if(snapshot.hasError){
-                                      return ProgressBar(context, 0, 1);
-                                    }else{
-                                      print("Zyarga Debugger Check : "+snapshot.requireData.toString());
-                                      return ProgressBar(context, 0, 1);
-                                    }
-                                  },
+                                Container(
+                                  height: 70,
+                                  child: FutureBuilder(
+                                    future: ProjectProgress(widget.id_project,"0"),
+                                    builder: (context, snapshot){
+                                      if(snapshot.hasData){
+                                        return ProgressBar(context, double.parse(snapshot.requireData), _random.nextInt(StyleCount()));
+                                      }else if(snapshot.hasError){
+                                        return ProgressBar(context, 0, 1);
+                                      }else{
+                                        print("Zyarga Debugger Check : "+snapshot.requireData.toString());
+                                        return ProgressBar(context, 0, 1);
+                                      }
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
@@ -183,13 +185,12 @@ class _MyTaskState extends State<MyTask> {
                                      child: InkWell(
                                        onTap: () {
                                          setState(() {
-                                            UpdateStatusProject(context, project.requireData[0]['id_project'], "1");
+                                            UpdateStatusProject(context, project.requireData[0]['id_project'],level, "1");
                                          });
                                          // toAddTask(context,widget.id_project);
                                        },
                                        child: AnimatedContainer(
                                          duration: Duration(milliseconds: 500),
-                                         margin: EdgeInsets.only(left: 10,right: 10,top: 10),
                                          decoration: BoxDecoration(
                                              color: project.requireData[0]['status'] == "1" ? Colors.red : Colors.white ,
                                              borderRadius: BorderRadius.circular(50)
@@ -213,7 +214,7 @@ class _MyTaskState extends State<MyTask> {
                                      child: InkWell(
                                        onTap: () {
                                          setState(() {
-                                           UpdateStatusProject(context, project.requireData[0]['id_project'], "2");
+                                           UpdateStatusProject(context, project.requireData[0]['id_project'],level, "2");
                                          });
                                          // toAddTask(context,widget.id_project);
                                        },
